@@ -1,0 +1,54 @@
+---
+name: "LangGraph"
+description: "A framework for building stateful, multi-agent AI applications using graph-based orchestration. Built by the LangChain team."
+excerpt: "Graph-based framework for building stateful multi-agent AI systems."
+pricing: "Free / Open Source"
+pros:
+  - "Excellent for complex agent workflows"
+  - "Built-in state management"
+  - "Graph-based orchestration is intuitive"
+  - "Strong LangChain ecosystem integration"
+  - "Human-in-the-loop support"
+  - "Active development and community"
+cons:
+  - "Steep learning curve"
+  - "Debugging complex graphs can be difficult"
+  - "Tied to LangChain ecosystem"
+  - "Documentation could be more comprehensive"
+useCases:
+  - "Multi-agent systems"
+  - "Stateful AI workflows"
+  - "Customer support bots"
+  - "Research assistants"
+  - "Complex RAG pipelines"
+alternatives:
+  - "CrewAI"
+  - "AutoGen"
+  - "Haystack"
+tags: ["ai-agents", "orchestration", "open-source", "langgraph"]
+category: "AI Agents"
+rating: 4.4
+url: "https://langchain-ai.github.io/langgraph/"
+---
+
+## Overview
+
+LangGraph is a framework for building stateful, multi-agent AI applications. It uses a graph-based approach where nodes represent actions and edges represent transitions, making complex AI workflows visual and manageable.
+
+## Key Features
+
+### Graph-Based Orchestration
+Define your agent workflow as a directed graph. Each node is a function that processes state, and edges define the flow between nodes. This makes complex workflows easier to reason about.
+
+### State Management
+LangGraph provides built-in state management that persists across graph executions. This is essential for multi-turn conversations, long-running workflows, and agent memory.
+
+### Human-in-the-Loop
+Built-in support for human approval steps, edits, and feedback loops. Critical for production agent systems where you need human oversight.
+
+### Streaming
+First-class support for streaming responses, intermediate states, and real-time updates. This is important for user-facing agent applications.
+
+## When to Use LangGraph
+
+Use LangGraph when you need complex, stateful AI workflows that go beyond simple chain-of-thought prompting. It excels at multi-agent coordination, workflows with branching logic, and systems that need human oversight. If you just need simple LLM calls, LangGraph is overkill.
