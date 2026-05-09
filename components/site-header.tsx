@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -23,8 +24,15 @@ export function SiteHeader() {
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl font-bold tracking-tight">
-            🐼 {siteConfig.name}
+          <Image
+            src="/logo.png"
+            alt={siteConfig.name}
+            width={36}
+            height={36}
+            className="rounded-md"
+          />
+          <span className="text-lg font-bold tracking-tight hidden sm:inline">
+            {siteConfig.name}
           </span>
         </Link>
 
