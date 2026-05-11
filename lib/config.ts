@@ -7,9 +7,9 @@ export const siteConfig = {
   url: "https://pandascodingschool.com",
   author: "Panda Coding School",
   links: {
-    twitter: "https://x.com/pandacodingschool",
     linkedin: "https://linkedin.com/company/pandacodingschool",
-    github: "https://github.com/pandacodingschool",
+    github: "https://github.com/pandascodingschool",
+    instagram: "https://instagram.com/pandacodingschool",
   },
 };
 
