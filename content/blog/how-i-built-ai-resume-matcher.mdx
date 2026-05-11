@@ -9,21 +9,21 @@ image: ""
 draft: false
 ---
 
-I built an AI resume matcher that scores how well a candidate's resume matches a job description. Here's the full breakdown — what worked, what failed, and what I'd do differently.
+I built an AI resume matcher that scores how well a candidate's resume fits a job description. Here's the full breakdown: what worked, what failed, and what I'd do differently next time.
 
 ## The Problem
 
-Recruiters spend hours scanning resumes. Most ATS systems use keyword matching, which misses qualified candidates who describe their skills differently.
+Recruiters spend hours scanning resumes. Most ATS systems rely on keyword matching, which means they miss qualified candidates who describe their skills a bit differently.
 
-I wanted to build something smarter — a system that understands semantic meaning, not just keywords.
+I wanted to build something smarter: a system that understands the meaning behind the words, not just the words themselves.
 
 ## Architecture Overview
 
 The system has three core components:
 
-1. **Document Processor** — Parses resumes and job descriptions into structured data
-2. **Vector Store** — Embeds and stores documents for semantic search
-3. **Scoring Engine** — Uses an LLM to generate match scores with explanations
+1. **Document Processor** - Parses resumes and job descriptions into structured data
+2. **Vector Store** - Embeds and stores documents for semantic search
+3. **Scoring Engine** - Uses an LLM to generate match scores with explanations
 
 ## Tech Stack
 
@@ -36,9 +36,10 @@ The system has three core components:
 
 ## The Document Processor
 
-The hardest part was handling the variety of resume formats — PDF, DOCX, images, and even LinkedIn profile URLs.
+The hardest part was handling the range of resume formats out there: PDF, DOCX, images, and even LinkedIn profile URLs.
 
-I used a combination of:
+I ended up using:
+
 - `pymupdf` for PDF extraction
 - `python-docx` for Word documents
 - A vision model for image-based resumes
@@ -53,46 +54,47 @@ Each resume gets embedded into a vector space. When a job description comes in, 
 2. Find the top-N most similar resumes via cosine similarity
 3. Pass the matches to the LLM for detailed scoring
 
-This two-stage approach keeps costs manageable — the vector search is cheap, and the LLM only processes the top candidates.
+The two-stage approach keeps costs manageable. Vector search is cheap, and the LLM only touches the top candidates.
 
 ## What Failed
 
-1. **Pure embedding similarity wasn't enough.** Two resumes with similar embedding scores could have very different actual relevance. The LLM scoring stage was essential.
+1. **Pure embedding similarity wasn't enough.** Two resumes with similar embedding scores could have very different actual relevance. The LLM scoring step turned out to be essential, not optional.
 
-2. **Resume parsing is a nightmare.** Every format, every layout, every encoding issue. I spent 3x more time on parsing than I budgeted.
+2. **Resume parsing is a nightmare.** Every format, every layout, every encoding quirk. I spent 3x more time on parsing than I budgeted.
 
-3. **Initial latency was too high.** Processing a single resume took 8 seconds. I had to add async processing and a queue system.
+3. **Initial latency was way too high.** Processing a single resume took 8 seconds. I had to add async processing and a proper queue system.
 
 ## What I'd Do Differently
 
-- **Start with structured input** instead of parsing free-form resumes
-- **Use a smaller model** for initial filtering, save GPT-4 for final scoring
-- **Build the queue system from day one** — don't bolt it on later
-- **Add evaluation metrics early** — without ground truth data, it's hard to know if your system is improving
+- **Start with structured input** instead of trying to parse free-form resumes
+- **Use a smaller model** for initial filtering and save GPT-4 for final scoring
+- **Build the queue system from day one** rather than bolting it on later
+- **Add evaluation metrics early** because without ground truth data, you can't tell if things are actually getting better
 
 ## Results
 
 After 3 weeks of building, the system could:
+
 - Process a resume in under 2 seconds (async)
 - Score matches with 85% agreement with human recruiters
 - Handle 500+ resumes per hour
 
 ## Cost Breakdown
 
-| Component | Monthly Cost |
-|-----------|-------------|
-| OpenAI API | ~$50 |
-| Pinecone | $70 |
-| Hosting (Railway) | $20 |
-| **Total** | **~$140/month** |
+| Component         | Monthly Cost    |
+| ----------------- | --------------- |
+| OpenAI API        | ~$50            |
+| Pinecone          | $70             |
+| Hosting (Railway) | $20             |
+| **Total**         | **~$140/month** |
 
-Not bad for a tool that saves recruiters hours per day.
+Not bad for a tool that saves recruiters hours every day.
 
 ## Key Takeaways
 
-1. **Data quality trumps model quality** — Better parsing beats a better LLM
-2. **Two-stage retrieval works** — Cheap vector search + expensive LLM scoring
-3. **Async processing is essential** — Don't make users wait for LLM calls
-4. **Build evaluation early** — You need metrics to improve
+1. **Data quality beats model quality.** Better parsing beats a fancier LLM every time.
+2. **Two-stage retrieval works well.** Cheap vector search plus targeted LLM scoring is the right pattern.
+3. **Async processing is not optional.** Don't make users wait on LLM calls.
+4. **Build evaluation early.** You need metrics to know if you're actually improving.
 
-Building in public means sharing the ugly parts too. This project taught me more about production AI systems than any tutorial ever could.
+Building in public means sharing the ugly parts too. This project taught me more about production AI systems than any tutorial ever has.

@@ -39,10 +39,7 @@ export const mdxComponents: MDXComponents = {
     </h2>
   ),
   h3: ({ children, ...props }) => (
-    <h3
-      className="mt-6 mb-2 text-xl font-semibold text-foreground"
-      {...props}
-    >
+    <h3 className="mt-6 mb-2 text-xl font-semibold text-foreground" {...props}>
       {children}
     </h3>
   ),
@@ -54,7 +51,11 @@ export const mdxComponents: MDXComponents = {
   a: ({ href, children, ...props }) => {
     if (href?.startsWith("/")) {
       return (
-        <Link href={href} className="text-primary underline underline-offset-4 hover:text-primary/80" {...props}>
+        <Link
+          href={href}
+          className="text-primary underline underline-offset-4 hover:text-primary/80"
+          {...props}
+        >
           {children}
         </Link>
       );
@@ -72,12 +73,18 @@ export const mdxComponents: MDXComponents = {
     );
   },
   ul: ({ children, ...props }) => (
-    <ul className="mb-4 ml-6 list-disc space-y-2 text-muted-foreground" {...props}>
+    <ul
+      className="mb-4 ml-6 list-disc space-y-2 text-muted-foreground"
+      {...props}
+    >
       {children}
     </ul>
   ),
   ol: ({ children, ...props }) => (
-    <ol className="mb-4 ml-6 list-decimal space-y-2 text-muted-foreground" {...props}>
+    <ol
+      className="mb-4 ml-6 list-decimal space-y-2 text-muted-foreground"
+      {...props}
+    >
       {children}
     </ol>
   ),
@@ -127,7 +134,10 @@ export const mdxComponents: MDXComponents = {
     </th>
   ),
   td: ({ children, ...props }) => (
-    <td className="border border-border px-4 py-2 text-muted-foreground" {...props}>
+    <td
+      className="border border-border px-4 py-2 text-muted-foreground"
+      {...props}
+    >
       {children}
     </td>
   ),
@@ -136,7 +146,8 @@ export const mdxComponents: MDXComponents = {
     <img
       src={src}
       alt={alt || ""}
-      className="my-6 rounded-lg border border-border"
+      className="my-8 w-full rounded-xl border border-border shadow-md"
+      loading="lazy"
       {...props}
     />
   ),

@@ -9,27 +9,27 @@ image: ""
 draft: false
 ---
 
-Building AI agents that work in demos is easy. Building ones that work in production is an entirely different challenge.
+Building AI agents that work in demos is easy. Building ones that hold up in production is a completely different challenge.
 
-After building and deploying multiple agent systems, here's the architecture patterns that actually survive contact with real users.
+After building and deploying multiple agent systems, these are the architecture patterns that actually survive contact with real users.
 
 ## The Core Agent Loop
 
 Every production agent follows the same fundamental loop:
 
-1. **Receive** — Accept user input or trigger
-2. **Plan** — Decide what actions to take
-3. **Execute** — Call tools and APIs
-4. **Observe** — Process results
-5. **Respond** — Return output to user
+1. **Receive** - Accept user input or trigger
+2. **Plan** - Decide what actions to take
+3. **Execute** - Call tools and APIs
+4. **Observe** - Process results
+5. **Respond** - Return output to user
 
-The complexity lies in making each step reliable, observable, and recoverable.
+The complexity is in making each step reliable, observable, and recoverable.
 
 ## Orchestration Patterns
 
 ### Single Agent
 
-Good for: Simple task-specific agents (e.g., code review, data extraction).
+Good for simple task-specific agents like code review or data extraction.
 
 ```python
 agent = create_agent(
@@ -41,21 +41,21 @@ agent = create_agent(
 
 ### Multi-Agent with Router
 
-Good for: Complex workflows where different agents specialize in different tasks.
+Good for complex workflows where different agents specialize in different tasks.
 
-The router agent analyzes the request and delegates to the appropriate specialist agent. This is the pattern we've seen work best in production.
+The router agent reads the request and hands it off to the right specialist. This is the pattern we've seen work best in production by far.
 
 ### Hierarchical Agents
 
-Good for: Enterprise workflows with approval chains and human-in-the-loop requirements.
+Good for enterprise workflows with approval chains and human-in-the-loop requirements.
 
 ## Memory Systems
 
-Production agents need memory. Here's what works:
+Production agents need memory. Here's what actually works:
 
-- **Short-term memory** — Conversation context within a session. Use a simple message buffer with token limits.
-- **Long-term memory** — Cross-session knowledge. Use a vector database (Pinecone, Weaviate, or pgvector).
-- **Procedural memory** — Learned patterns and preferences. Store in structured databases.
+- **Short-term memory:** Conversation context within a session. A simple message buffer with token limits works fine.
+- **Long-term memory:** Cross-session knowledge. Use a vector database like Pinecone, Weaviate, or pgvector.
+- **Procedural memory:** Learned patterns and preferences. Store these in structured databases.
 
 ## Tool Calling Best Practices
 
@@ -67,7 +67,7 @@ Production agents need memory. Here's what works:
 
 ## Observability
 
-You cannot run agents in production without observability. At minimum, track:
+You genuinely cannot run agents in production without observability. At minimum, track:
 
 - **Latency** per step and end-to-end
 - **Token usage** and cost per request
@@ -75,14 +75,14 @@ You cannot run agents in production without observability. At minimum, track:
 - **User satisfaction** signals
 - **Agent decision traces** for debugging
 
-Tools like LangSmith, Langfuse, and Arize are essential here.
+LangSmith, Langfuse, and Arize are all solid options here.
 
 ## Key Lessons
 
-1. **Start simple** — Single agent, few tools, clear scope
-2. **Add guardrails early** — Input validation, output filtering, rate limiting
-3. **Make everything observable** — You'll need traces to debug production issues
-4. **Plan for failure** — Every tool call can fail; every LLM call can hallucinate
-5. **Test with real data** — Synthetic tests miss edge cases that real users find instantly
+1. **Start simple.** Single agent, few tools, clear scope.
+2. **Add guardrails early.** Input validation, output filtering, rate limiting.
+3. **Make everything observable.** You'll need traces when things go wrong in production.
+4. **Plan for failure.** Every tool call can fail. Every LLM call can hallucinate.
+5. **Test with real data.** Synthetic tests miss the edge cases real users find instantly.
 
-The best AI agent architectures are boring in all the right ways — reliable, observable, and easy to debug.
+The best AI agent architectures are boring in all the right ways: reliable, observable, and easy to debug.

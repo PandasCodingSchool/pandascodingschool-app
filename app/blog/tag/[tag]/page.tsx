@@ -2,16 +2,14 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { BlogCard } from "@/components/blog-card";
 import { getAllBlogPosts } from "@/lib/content";
-import { format } from "date-fns";
 
 export async function generateStaticParams() {
   const posts = getAllBlogPosts();
   const tags = new Set<string>();
   posts.forEach((p) =>
-    p.tags.forEach((t) => tags.add(t.toLowerCase().replace(/\s+/g, "-")))
+    p.tags.forEach((t) => tags.add(t.toLowerCase().replace(/\s+/g, "-"))),
   );
   return Array.from(tags).map((tag) => ({ tag }));
 }
@@ -36,9 +34,7 @@ export default async function TagPage({
 }) {
   const { tag } = await params;
   const posts = getAllBlogPosts().filter((post) =>
-    post.tags
-      .map((t) => t.toLowerCase().replace(/\s+/g, "-"))
-      .includes(tag)
+    post.tags.map((t) => t.toLowerCase().replace(/\s+/g, "-")).includes(tag),
   );
 
   if (posts.length === 0) notFound();
@@ -66,29 +62,7 @@ export default async function TagPage({
 
       <div className="grid gap-6 sm:grid-cols-2">
         {posts.map((post) => (
-          <Link key={post.slug} href={`/blog/${post.slug}`}>
-            <Card className="group h-full transition-colors hover:border-primary/50">
-              <CardContent className="p-6">
-                <div className="mb-3 flex items-center gap-2">
-                  <Badge variant="secondary" className="text-xs">
-                    {post.category}
-                  </Badge>
-                  <span className="text-xs text-muted-foreground">
-                    {post.readingTime}
-                  </span>
-                  <span className="text-xs text-muted-foreground">
-                    {format(new Date(post.date), "MMM d, yyyy")}
-                  </span>
-                </div>
-                <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                  {post.title}
-                </h2>
-                <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                  {post.excerpt}
-                </p>
-              </CardContent>
-            </Card>
-          </Link>
+          <BlogCard key={post.slug} post={post} showDate />
         ))}
       </div>
     </div>

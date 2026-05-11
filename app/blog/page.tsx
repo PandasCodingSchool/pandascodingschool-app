@@ -1,9 +1,8 @@
 import Link from "next/link";
 import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { BlogCard } from "@/components/blog-card";
 import { getAllBlogPosts, getAllBlogCategories } from "@/lib/content";
-import { format } from "date-fns";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -51,39 +50,7 @@ export default function BlogPage() {
       ) : (
         <div className="grid gap-6 sm:grid-cols-2">
           {posts.map((post) => (
-            <Link key={post.slug} href={`/blog/${post.slug}`}>
-              <Card className="group h-full transition-colors hover:border-primary/50">
-                <CardContent className="p-6">
-                  <div className="mb-3 flex items-center gap-2">
-                    <Badge variant="secondary" className="text-xs">
-                      {post.category}
-                    </Badge>
-                    <span className="text-xs text-muted-foreground">
-                      {post.readingTime}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {format(new Date(post.date), "MMM d, yyyy")}
-                    </span>
-                  </div>
-                  <h2 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
-                    {post.title}
-                  </h2>
-                  <p className="mt-2 line-clamp-2 text-sm text-muted-foreground">
-                    {post.excerpt}
-                  </p>
-                  <div className="mt-4 flex flex-wrap gap-1.5">
-                    {post.tags.slice(0, 4).map((tag) => (
-                      <span
-                        key={tag}
-                        className="text-xs text-muted-foreground"
-                      >
-                        #{tag}
-                      </span>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
+            <BlogCard key={post.slug} post={post} showDate />
           ))}
         </div>
       )}
