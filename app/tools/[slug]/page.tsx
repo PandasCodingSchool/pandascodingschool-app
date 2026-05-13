@@ -9,7 +9,7 @@ import { Separator } from "@/components/ui/separator";
 import { getTool, getAllTools } from "@/lib/content";
 import { renderMDX } from "@/lib/mdx";
 import { siteConfig } from "@/lib/config";
-import { getToolJsonLd } from "@/lib/json-ld";
+import { getToolJsonLd, getBreadcrumbJsonLd } from "@/lib/json-ld";
 
 export async function generateStaticParams() {
   const tools = getAllTools();
@@ -25,14 +25,48 @@ export async function generateMetadata({
   const tool = getTool(slug);
   if (!tool) return {};
 
+  const canonicalUrl = `${siteConfig.url}/tools/${tool.slug}`;
+  const ogImage = tool.logo || "/assets/best-ai-tools.png";
+
   return {
-    title: `${tool.name} Review`,
+    title: `${tool.name} Review - ${tool.category} Tool`,
     description: tool.description || tool.excerpt,
+    keywords: [
+      ...tool.tags,
+      tool.category,
+      "AI tool",
+      "review",
+      ...siteConfig.keywords,
+    ].slice(0, 10),
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
-      title: `${tool.name} Review | ${siteConfig.name}`,
+      title: `${tool.name} Review - ${tool.category} Tool | ${siteConfig.name}`,
       description: tool.description || tool.excerpt,
-      type: "article",
-      url: `${siteConfig.url}/tools/${tool.slug}`,
+      type: "website",
+      url: canonicalUrl,
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: ogImage.startsWith("http")
+            ? ogImage
+            : `${siteConfig.url}${ogImage}`,
+          width: 1200,
+          height: 630,
+          alt: `${tool.name} - ${tool.category} Tool`,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      site: "@pandacodingschool",
+      creator: "@pandacodingschool",
+      title: `${tool.name} Review - ${tool.category} Tool`,
+      description: tool.description || tool.excerpt,
+      images: [
+        ogImage.startsWith("http") ? ogImage : `${siteConfig.url}${ogImage}`,
+      ],
     },
   };
 }
@@ -49,12 +83,31 @@ export default async function ToolPage({
 
   const content = await renderMDX(tool.content);
 
+  // Breadcrumb structured data
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "AI Tools", url: "/tools" },
+    {
+      name: tool.category,
+      url: `/tools/category/${tool.category.toLowerCase().replace(/\s+/g, "-")}`,
+    },
+    { name: tool.name, url: `/tools/${tool.slug}` },
+  ];
+
   return (
     <div className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+      {/* Tool Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(getToolJsonLd(tool)),
+        }}
+      />
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getBreadcrumbJsonLd(breadcrumbItems)),
         }}
       />
       <Link

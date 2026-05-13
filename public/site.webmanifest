@@ -1,0 +1,35 @@
+{
+  "name": "Panda Coding School",
+  "short_name": "Panda Coding",
+  "description": "Practical AI engineering, tools, experiments, and startup architectures. Learn to build with AI.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0a0a0a",
+  "theme_color": "#22c55e",
+  "orientation": "portrait-primary",
+  "scope": "/",
+  "lang": "en",
+  "icons": [
+    {
+      "src": "/logo.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "developer", "technology"],
+  "screenshots": [
+    {
+      "src": "/assets/best-ai-tools.png",
+      "sizes": "1200x630",
+      "type": "image/png",
+      "form_factor": "wide"
+    }
+  ]
+}

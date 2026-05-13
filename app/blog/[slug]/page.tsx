@@ -10,7 +10,7 @@ import { getBlogPost, getAllBlogPosts, getRelatedPosts } from "@/lib/content";
 import { renderMDX } from "@/lib/mdx";
 import { siteConfig } from "@/lib/config";
 import { format } from "date-fns";
-import { getArticleJsonLd } from "@/lib/json-ld";
+import { getArticleJsonLd, getBreadcrumbJsonLd } from "@/lib/json-ld";
 
 export async function generateStaticParams() {
   const posts = getAllBlogPosts();
@@ -26,21 +26,51 @@ export async function generateMetadata({
   const post = getBlogPost(slug);
   if (!post) return {};
 
+  const ogImage = post.image || "/assets/best-ai-tools.png";
+  const canonicalUrl = `${siteConfig.url}/blog/${post.slug}`;
+
   return {
     title: post.title,
     description: post.excerpt,
+    keywords: [...post.tags, post.category, ...siteConfig.keywords].slice(
+      0,
+      10,
+    ),
+    authors: [{ name: post.author }],
+    creator: post.author,
+    publisher: siteConfig.name,
+    alternates: {
+      canonical: canonicalUrl,
+    },
     openGraph: {
       title: post.title,
       description: post.excerpt,
       type: "article",
       publishedTime: post.date,
+      modifiedTime: post.updated || post.date,
       authors: [post.author],
-      url: `${siteConfig.url}/blog/${post.slug}`,
+      url: canonicalUrl,
+      siteName: siteConfig.name,
+      images: [
+        {
+          url: ogImage.startsWith("http")
+            ? ogImage
+            : `${siteConfig.url}${ogImage}`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
     },
     twitter: {
       card: "summary_large_image",
+      site: "@pandacodingschool",
+      creator: "@pandacodingschool",
       title: post.title,
       description: post.excerpt,
+      images: [
+        ogImage.startsWith("http") ? ogImage : `${siteConfig.url}${ogImage}`,
+      ],
     },
   };
 }
@@ -58,12 +88,31 @@ export default async function BlogPostPage({
   const content = await renderMDX(post.content);
   const relatedPosts = getRelatedPosts(slug, 3);
 
+  // Breadcrumb structured data
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Blog", url: "/blog" },
+    {
+      name: post.category,
+      url: `/blog/category/${post.category.toLowerCase().replace(/\s+/g, "-")}`,
+    },
+    { name: post.title, url: `/blog/${post.slug}` },
+  ];
+
   return (
     <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+      {/* Article Structured Data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(getArticleJsonLd(post)),
+        }}
+      />
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getBreadcrumbJsonLd(breadcrumbItems)),
         }}
       />
       <Link

@@ -3,19 +3,84 @@ import type { Metadata } from "next";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { getAllTools, getAllToolCategories } from "@/lib/content";
+import { siteConfig } from "@/lib/config";
+import { getBreadcrumbJsonLd, getWebPageJsonLd } from "@/lib/json-ld";
 
 export const metadata: Metadata = {
-  title: "AI Tools Directory",
+  title: "AI Tools Directory - Reviews & Comparisons",
   description:
-    "Discover the best AI tools for developers, engineers, and builders. Reviews with pricing, pros/cons, and real use cases.",
+    "Discover the best AI tools for developers, engineers, and builders. Reviews with pricing, pros/cons, and real use cases. Cursor AI, GitHub Copilot, Claude, and more.",
+  keywords: [
+    "AI tools",
+    "developer tools",
+    "software reviews",
+    "Cursor AI",
+    "GitHub Copilot",
+    "Claude",
+    ...siteConfig.keywords,
+  ].slice(0, 15),
+  alternates: {
+    canonical: `${siteConfig.url}/tools`,
+  },
+  openGraph: {
+    title: "AI Tools Directory - Reviews & Comparisons | Panda Coding School",
+    description:
+      "Discover the best AI tools for developers, engineers, and builders. Reviews with pricing, pros/cons, and real use cases.",
+    type: "website",
+    url: `${siteConfig.url}/tools`,
+    siteName: siteConfig.name,
+    images: [
+      {
+        url: `${siteConfig.url}/assets/best-ai-tools.png`,
+        width: 1200,
+        height: 630,
+        alt: "AI Tools Directory - Reviews and Comparisons",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    site: "@pandacodingschool",
+    creator: "@pandacodingschool",
+    title: "AI Tools Directory - Reviews & Comparisons",
+    description:
+      "Discover the best AI tools for developers, engineers, and builders. Reviews with pricing, pros/cons, and real use cases.",
+    images: [`${siteConfig.url}/assets/best-ai-tools.png`],
+  },
 };
 
 export default function ToolsPage() {
   const tools = getAllTools();
   const categories = getAllToolCategories();
 
+  // Structured data
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "AI Tools", url: "/tools" },
+  ];
+
   return (
     <div className="mx-auto max-w-6xl px-4 py-16 sm:px-6">
+      {/* WebPage Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(
+            getWebPageJsonLd(
+              "AI Tools Directory - Reviews & Comparisons",
+              "Discover the best AI tools for developers, engineers, and builders. Reviews with pricing, pros/cons, and real use cases.",
+              "/tools",
+            ),
+          ),
+        }}
+      />
+      {/* Breadcrumb Structured Data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(getBreadcrumbJsonLd(breadcrumbItems)),
+        }}
+      />
       <div className="mb-12">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
           AI Tools Directory
