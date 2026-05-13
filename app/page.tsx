@@ -7,7 +7,41 @@ import { BlogCard } from "@/components/blog-card";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { getAllBlogPosts, getAllTools } from "@/lib/content";
 import { HeroGridBg } from "@/components/hero-grid-bg";
-import { getWebsiteJsonLd } from "@/lib/json-ld";
+import { getWebsiteJsonLd, getFAQJsonLd } from "@/lib/json-ld";
+import { HelpCircle } from "lucide-react";
+
+const faqs = [
+  {
+    question: "What is Panda Coding School?",
+    answer:
+      "Panda Coding School is a resource hub for developers and engineers who want to build real AI systems. We provide practical tutorials, tool reviews, and build-in-public stories focused on AI engineering, agent architectures, and developer productivity.",
+  },
+  {
+    question: "Who is behind Panda Coding School?",
+    answer:
+      "Panda Coding School is run by a team of engineers and builders who have shipped AI systems in production. We share what actually works, what failed, and lessons learned from real projects.",
+  },
+  {
+    question: "What topics do you cover?",
+    answer:
+      "We cover AI coding tools (Cursor, GitHub Copilot, Claude), agent architectures (LangGraph, RAG systems), voice AI, real-time analytics, vector databases, and startup engineering. Everything is hands-on and production-focused.",
+  },
+  {
+    question: "Is the content free?",
+    answer:
+      "Yes, all our articles, tool reviews, and resources are completely free. We also offer a free newsletter with weekly AI engineering insights and exclusive tips not published on the blog.",
+  },
+  {
+    question: "How often do you publish new content?",
+    answer:
+      "We publish new articles weekly, covering the latest AI tools, engineering patterns, and build-in-public updates. Newsletter subscribers get early access and exclusive content.",
+  },
+  {
+    question: "Can I suggest a topic or tool to review?",
+    answer:
+      "Absolutely! We love hearing from the community. Reach out to us on Twitter @pandacodingschool or through our newsletter with your suggestions. We prioritize topics that help builders ship better AI systems.",
+  },
+];
 
 const features = [
   {
@@ -199,6 +233,44 @@ export default function Home() {
           </div>
         </section>
       )}
+
+      {/* FAQ Section */}
+      <section className="border-b border-border/40 py-20">
+        <div className="mx-auto max-w-4xl px-4 sm:px-6">
+          {/* FAQ Structured Data */}
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{
+              __html: JSON.stringify(getFAQJsonLd(faqs)),
+            }}
+          />
+          <div className="mb-12 text-center">
+            <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-3">
+              <HelpCircle className="h-6 w-6 text-primary" />
+            </div>
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              Frequently Asked Questions
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              Everything you need to know about Panda Coding School
+            </p>
+          </div>
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <Card key={index} className="border-border/60">
+                <CardContent className="p-6">
+                  <h3 className="text-base font-semibold text-foreground">
+                    {faq.question}
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* Newsletter CTA */}
       <section className="py-20">
