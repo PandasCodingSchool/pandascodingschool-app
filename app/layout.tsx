@@ -45,9 +45,9 @@ export const metadata: Metadata = {
     },
   },
   icons: {
-    icon: "/favicon.png",
-    apple: "/logo.png",
-    shortcut: "/favicon.png",
+    icon: [{ url: `${siteConfig.url}/favicon.png`, type: "image/png" }],
+    apple: [{ url: `${siteConfig.url}/logo.png`, type: "image/png" }],
+    shortcut: `${siteConfig.url}/favicon.png`,
   },
   manifest: "/site.webmanifest",
   openGraph: {
