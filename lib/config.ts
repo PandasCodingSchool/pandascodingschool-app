@@ -30,7 +30,6 @@ export const siteConfig = {
     linkedin: "https://linkedin.com/company/pandacodingschool",
     github: "https://github.com/pandascodingschool",
     instagram: "https://instagram.com/pandacodingschool",
-    twitter: "https://x.com/pandacodingschool",
   },
 };
 

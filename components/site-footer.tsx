@@ -14,9 +14,9 @@ const footerLinks = {
     { title: "Newsletter", href: "/newsletter" },
   ],
   Categories: [
-    { title: "AI Agents", href: "/blog/category/ai-agents" },
+    { title: "AI Tools", href: "/blog/category/ai-tools" },
     { title: "Architecture", href: "/blog/category/architecture" },
-    { title: "Tutorials", href: "/blog/category/tutorials" },
+    { title: "Startups", href: "/blog/category/startups" },
   ],
 };
 
