@@ -1,0 +1,518 @@
+---
+title: "7 Design Patterns Every Developer Should Know"
+date: "2026-06-02"
+excerpt: "Design patterns are proven solutions to common software design problems. Learn 7 essential patterns: Singleton, Factory, Builder, Facade, Adapter, Strategy, and Observer."
+author: "Panda Coding School"
+category: "Tutorials"
+tags:
+  [
+    "design-patterns",
+    "software-engineering",
+    "typescript",
+    "best-practices",
+    "architecture",
+  ]
+image: "/assets/7-design-pattern.png"
+draft: false
+readingTime: 10
+---
+
+Design patterns are proven solutions to common software design problems. They help developers write code that is easier to understand, maintain, and scale.
+
+Think of design patterns as reusable blueprints. Just as architects use standard designs for buildings, software engineers use design patterns to solve recurring programming challenges.
+
+In this article, we'll explore **7 essential design patterns** that every developer should know, grouped into three categories:
+
+- Creational Patterns
+  - Singleton Pattern
+  - Factory Pattern
+  - Builder Pattern
+
+- Structural Patterns
+  - Facade Pattern
+  - Adapter Pattern
+
+- Behavioral Patterns
+  - Strategy Pattern
+  - Observer Pattern
+
+Let's dive in.
+
+---
+
+# 1. Singleton Pattern
+
+## What is it?
+
+The Singleton Pattern ensures that a class has only one instance throughout the application and provides a global access point to it.
+
+## Real-World Example
+
+Imagine a printer manager in an office. You don't want every employee creating their own printer controller. Instead, everyone should use the same printer manager instance.
+
+## When to Use
+
+- Database connections
+- Logging services
+- Configuration managers
+- Cache managers
+
+## Example (TypeScript)
+
+```typescript
+class Database {
+  private static instance: Database;
+
+  private constructor() {}
+
+  static getInstance(): Database {
+    if (!Database.instance) {
+      Database.instance = new Database();
+    }
+
+    return Database.instance;
+  }
+
+  connect() {
+    console.log("Database Connected");
+  }
+}
+
+const db1 = Database.getInstance();
+const db2 = Database.getInstance();
+
+console.log(db1 === db2); // true
+```
+
+## Benefits
+
+- Prevents multiple instances
+
+- Saves memory
+
+- Provides centralized access
+
+---
+
+# 2. Factory Pattern
+
+## What is it?
+
+The Factory Pattern creates objects without exposing the object creation logic to the client.
+
+Instead of using `new` everywhere, we delegate object creation to a factory.
+
+## Real-World Example
+
+Think about ordering food from a restaurant.
+
+You simply ask for a pizza. The kitchen decides how to prepare it. You don't care about the cooking process.
+
+## When to Use
+
+- Multiple object types
+- Complex object creation
+- Plugin systems
+
+## Example (TypeScript)
+
+```typescript
+interface Notification {
+  send(message: string): void;
+}
+
+class EmailNotification implements Notification {
+  send(message: string) {
+    console.log(`Email: ${message}`);
+  }
+}
+
+class SMSNotification implements Notification {
+  send(message: string) {
+    console.log(`SMS: ${message}`);
+  }
+}
+
+class NotificationFactory {
+  static create(type: string): Notification {
+    switch (type) {
+      case "email":
+        return new EmailNotification();
+
+      case "sms":
+        return new SMSNotification();
+
+      default:
+        throw new Error("Invalid notification type");
+    }
+  }
+}
+
+const notification = NotificationFactory.create("email");
+
+notification.send("Welcome!");
+```
+
+## Benefits
+
+- Loose coupling
+
+- Easier maintenance
+
+- Easy to extend
+
+---
+
+# 3. Builder Pattern
+
+## What is it?
+
+The Builder Pattern helps create complex objects step by step.
+
+Instead of passing dozens of constructor parameters, we build the object gradually.
+
+## Real-World Example
+
+Ordering a custom burger.
+
+You choose:
+
+- Bun
+- Cheese
+- Sauce
+- Patty
+- Vegetables
+
+The burger is built piece by piece.
+
+## When to Use
+
+- Objects with many optional fields
+- Complex configurations
+- Fluent APIs
+
+## Example (TypeScript)
+
+```typescript
+class User {
+  constructor(
+    public name: string,
+    public email?: string,
+    public phone?: string,
+  ) {}
+}
+
+class UserBuilder {
+  private name = "";
+  private email?: string;
+  private phone?: string;
+
+  setName(name: string) {
+    this.name = name;
+    return this;
+  }
+
+  setEmail(email: string) {
+    this.email = email;
+    return this;
+  }
+
+  setPhone(phone: string) {
+    this.phone = phone;
+    return this;
+  }
+
+  build() {
+    return new User(this.name, this.email, this.phone);
+  }
+}
+
+const user = new UserBuilder()
+  .setName("Pankaj")
+  .setEmail("pankaj@example.com")
+  .build();
+```
+
+## Benefits
+
+- Readable code
+
+- Flexible object creation
+
+- Avoids constructor overloads
+
+---
+
+# 4. Facade Pattern
+
+## What is it?
+
+The Facade Pattern provides a simple interface to a complex subsystem.
+
+It hides complexity and exposes only what the client needs.
+
+## Real-World Example
+
+A car dashboard.
+
+You start a car with a single button, but behind the scenes:
+
+- Battery activates
+- Fuel system starts
+- Engine checks occur
+
+The dashboard acts as a facade.
+
+## Example (TypeScript)
+
+```typescript
+class CPU {
+  start() {
+    console.log("CPU Started");
+  }
+}
+
+class Memory {
+  load() {
+    console.log("Memory Loaded");
+  }
+}
+
+class HardDrive {
+  read() {
+    console.log("Reading Data");
+  }
+}
+
+class ComputerFacade {
+  private cpu = new CPU();
+  private memory = new Memory();
+  private hardDrive = new HardDrive();
+
+  startComputer() {
+    this.cpu.start();
+    this.memory.load();
+    this.hardDrive.read();
+  }
+}
+
+const computer = new ComputerFacade();
+computer.startComputer();
+```
+
+## Benefits
+
+- Simplifies APIs
+
+- Reduces complexity
+
+- Improves readability
+
+---
+
+# 5. Adapter Pattern
+
+## What is it?
+
+The Adapter Pattern allows incompatible interfaces to work together.
+
+It acts as a translator between two systems.
+
+## Real-World Example
+
+A travel adapter.
+
+Your charger may have a different plug type, but the adapter lets it work in another country's socket.
+
+## When to Use
+
+- Third-party integrations
+- Legacy system migration
+- API compatibility
+
+## Example (TypeScript)
+
+```typescript
+class OldPaymentGateway {
+  makePayment(amount: number) {
+    console.log(`Processing payment: ${amount}`);
+  }
+}
+
+interface PaymentProcessor {
+  pay(amount: number): void;
+}
+
+class PaymentAdapter implements PaymentProcessor {
+  constructor(private gateway: OldPaymentGateway) {}
+
+  pay(amount: number) {
+    this.gateway.makePayment(amount);
+  }
+}
+
+const processor = new PaymentAdapter(new OldPaymentGateway());
+
+processor.pay(1000);
+```
+
+## Benefits
+
+- Reuse existing code
+
+- Easier integrations
+
+- Reduces refactoring effort
+
+---
+
+# 6. Strategy Pattern
+
+## What is it?
+
+The Strategy Pattern allows us to define multiple algorithms and switch between them dynamically.
+
+Instead of writing large conditional statements, we encapsulate each behavior separately.
+
+## Real-World Example
+
+Google Maps.
+
+You can choose:
+
+- Driving
+- Walking
+- Cycling
+
+The destination remains the same, but the route calculation strategy changes.
+
+## Example (TypeScript)
+
+```typescript
+interface PaymentStrategy {
+  pay(amount: number): void;
+}
+
+class CreditCardPayment implements PaymentStrategy {
+  pay(amount: number) {
+    console.log(`Paid ${amount} using Credit Card`);
+  }
+}
+
+class UpiPayment implements PaymentStrategy {
+  pay(amount: number) {
+    console.log(`Paid ${amount} using UPI`);
+  }
+}
+
+class PaymentContext {
+  constructor(private strategy: PaymentStrategy) {}
+
+  process(amount: number) {
+    this.strategy.pay(amount);
+  }
+}
+
+const payment = new PaymentContext(new UpiPayment());
+
+payment.process(500);
+```
+
+## Benefits
+
+- Eliminates large if-else chains
+
+- Easy to add new strategies
+
+- Follows Open-Closed Principle
+
+---
+
+# 7. Observer Pattern
+
+## What is it?
+
+The Observer Pattern defines a one-to-many relationship between objects.
+
+When one object changes state, all dependent objects are automatically notified.
+
+## Real-World Example
+
+YouTube subscriptions.
+
+When a creator uploads a new video, all subscribers receive notifications automatically.
+
+## When to Use
+
+- Event systems
+- Notifications
+- Real-time updates
+- State management
+
+## Example (TypeScript)
+
+```typescript
+interface Observer {
+  update(message: string): void;
+}
+
+class Subscriber implements Observer {
+  constructor(private name: string) {}
+
+  update(message: string) {
+    console.log(`${this.name}: ${message}`);
+  }
+}
+
+class Channel {
+  private subscribers: Observer[] = [];
+
+  subscribe(observer: Observer) {
+    this.subscribers.push(observer);
+  }
+
+  notify(message: string) {
+    this.subscribers.forEach((subscriber) => subscriber.update(message));
+  }
+}
+
+const channel = new Channel();
+
+channel.subscribe(new Subscriber("Alice"));
+
+channel.subscribe(new Subscriber("Bob"));
+
+channel.notify("New Design Pattern Video Uploaded!");
+```
+
+## Benefits
+
+- Loose coupling
+
+- Event-driven architecture
+
+- Easy scalability
+
+---
+
+# Final Thoughts
+
+Design patterns are not magic solutions, and they shouldn't be applied everywhere. However, understanding them will help you recognize common design problems and solve them in a structured way.
+
+If you're just starting your software engineering journey, focus on understanding these seven patterns first:
+
+| Category   | Pattern   |
+| ---------- | --------- |
+| Creational | Singleton |
+| Creational | Factory   |
+| Creational | Builder   |
+| Structural | Facade    |
+| Structural | Adapter   |
+| Behavioral | Strategy  |
+| Behavioral | Observer  |
+
+You'll encounter these patterns in frameworks like Angular, React, Spring Boot, NestJS, Django, and many enterprise applications.
+
+The best way to learn design patterns is not by memorizing definitions, but by implementing them in real projects. Start identifying repetitive problems in your codebase and see where these patterns can simplify your design.
+
+Happy Coding! 🚀

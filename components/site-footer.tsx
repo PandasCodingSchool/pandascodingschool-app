@@ -16,7 +16,7 @@ const footerLinks = {
   Categories: [
     { title: "AI Tools", href: "/blog/category/ai-tools" },
     { title: "Architecture", href: "/blog/category/architecture" },
-    { title: "Startups", href: "/blog/category/startups" },
+    { title: "Tutorials", href: "/blog/category/tutorials" },
   ],
 };
 
