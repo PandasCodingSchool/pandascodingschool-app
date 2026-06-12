@@ -24,6 +24,10 @@ export async function generateMetadata({
   return {
     title: `#${label} Articles`,
     description: `Browse all articles tagged with ${label}.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

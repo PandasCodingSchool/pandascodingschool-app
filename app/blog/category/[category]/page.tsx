@@ -23,6 +23,10 @@ export async function generateMetadata({
   return {
     title: `${label.charAt(0).toUpperCase() + label.slice(1)} Articles`,
     description: `Browse all articles in the ${label} category.`,
+    robots: {
+      index: false,
+      follow: true,
+    },
   };
 }
 

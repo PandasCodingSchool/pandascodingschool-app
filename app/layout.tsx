@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   publisher: siteConfig.author,
   metadataBase: new URL(siteConfig.url),
   alternates: {
-    canonical: "/",
+    canonical: siteConfig.url,
   },
   robots: {
     index: true,
@@ -74,9 +74,7 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: ["/assets/best-ai-tools.png"],
   },
-  verification: {
-    google: "your-google-verification-code", // Replace with actual code
-  },
+  verification: {},
 };
 
 export default function RootLayout({
