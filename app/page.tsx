@@ -1,9 +1,19 @@
 import Link from "next/link";
-import { ArrowRight, Zap, BookOpen, Wrench, Code2 } from "lucide-react";
+import {
+  ArrowRight,
+  Zap,
+  BookOpen,
+  Wrench,
+  Code2,
+  Check,
+  Star,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
 import { BlogCard } from "@/components/blog-card";
+import { FeaturedPost } from "@/components/featured-post";
+import { FaqAccordion } from "@/components/faq-accordion";
+import { Reveal } from "@/components/reveal";
 import { NewsletterForm } from "@/components/newsletter-form";
 import { getAllBlogPosts, getAllTools } from "@/lib/content";
 import { HeroGridBg } from "@/components/hero-grid-bg";
@@ -71,8 +81,18 @@ const features = [
 ];
 
 export default function Home() {
-  const posts = getAllBlogPosts().slice(0, 4);
-  const tools = getAllTools().slice(0, 6);
+  const allPosts = getAllBlogPosts();
+  const allTools = getAllTools();
+  const posts = allPosts.slice(0, 4);
+  const tools = allTools.slice(0, 6);
+
+  const topicCount = new Set(allPosts.flatMap((p) => p.tags)).size;
+  const stats = [
+    { value: `${allPosts.length}+`, label: "In-depth articles" },
+    { value: `${allTools.length}+`, label: "AI tools reviewed" },
+    { value: `${topicCount}+`, label: "Topics covered" },
+    { value: "Weekly", label: "New content" },
+  ];
 
   return (
     <div className="flex flex-col">
@@ -88,21 +108,32 @@ export default function Home() {
         <div className="absolute inset-0 bg-linear-to-br from-primary/5 via-transparent to-primary/5 pointer-events-none" />
         <div className="relative mx-auto max-w-6xl px-4 py-24 sm:px-6 sm:py-32 lg:py-40">
           <div className="mx-auto max-w-3xl text-center">
-            <Badge variant="secondary" className="mb-6">
-              Practical AI Engineering for Builders
+            <Badge
+              variant="secondary"
+              className="mb-6 gap-1.5 border-primary/20 bg-primary/10 text-primary"
+            >
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+                <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
+              </span>
+              New AI deep-dives every week
             </Badge>
             <h1 className="text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl">
-              Build Real AI Systems.
+              Learn to build AI systems that{" "}
+              <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                actually ship
+              </span>
+              .
             </h1>
             <p className="mt-6 text-lg text-muted-foreground sm:text-xl">
-              Practical AI engineering, tools, experiments, and startup
-              architectures. No fluff — just real systems built by real
-              engineers.
+              I break down the AI tools, agent architectures, and engineering
+              patterns I use to build production systems. Real code, real
+              trade-offs, and the mistakes I made so you don&apos;t have to.
             </p>
             <div className="mt-10 flex flex-col items-center gap-4 sm:flex-row sm:justify-center">
               <Link href="/blog">
                 <Button size="lg" className="h-12 px-8 text-base">
-                  Explore Articles
+                  Start Reading
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
@@ -112,10 +143,24 @@ export default function Home() {
                   size="lg"
                   className="h-12 px-8 text-base"
                 >
-                  Join Newsletter
+                  Join the Newsletter
                 </Button>
               </Link>
             </div>
+
+            {/* Stat bar */}
+            <dl className="mx-auto mt-16 grid max-w-2xl grid-cols-2 gap-6 sm:grid-cols-4">
+              {stats.map((stat) => (
+                <div key={stat.label} className="flex flex-col items-center">
+                  <dt className="text-2xl font-bold text-foreground sm:text-3xl">
+                    {stat.value}
+                  </dt>
+                  <dd className="mt-1 text-xs text-muted-foreground sm:text-sm">
+                    {stat.label}
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </div>
         </div>
       </section>
@@ -123,19 +168,30 @@ export default function Home() {
       {/* Features Grid */}
       <section className="border-b border-border/40 py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
-            {features.map((feature) => (
-              <div key={feature.title} className="group">
-                <div className="mb-3 inline-flex rounded-lg bg-primary/10 p-2.5">
-                  <feature.icon className="h-5 w-5 text-primary" />
+          <div className="mx-auto mb-12 max-w-2xl text-center">
+            <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
+              Everything you need to build with AI
+            </h2>
+            <p className="mt-3 text-muted-foreground">
+              No theory dumps. Just the tools, patterns, and hard-won lessons
+              that help you ship.
+            </p>
+          </div>
+          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {features.map((feature, i) => (
+              <Reveal key={feature.title} delay={i * 80}>
+                <div className="group h-full rounded-xl border border-border/60 bg-card p-6 transition-all duration-200 hover:-translate-y-1 hover:border-primary/40 hover:shadow-lg hover:shadow-primary/5">
+                  <div className="mb-4 inline-flex rounded-lg bg-primary/10 p-2.5 ring-1 ring-primary/20 transition-colors group-hover:bg-primary/15">
+                    <feature.icon className="h-5 w-5 text-primary" />
+                  </div>
+                  <h3 className="text-base font-semibold text-foreground">
+                    {feature.title}
+                  </h3>
+                  <p className="mt-1.5 text-sm text-muted-foreground">
+                    {feature.description}
+                  </p>
                 </div>
-                <h3 className="text-base font-semibold text-foreground">
-                  {feature.title}
-                </h3>
-                <p className="mt-1.5 text-sm text-muted-foreground">
-                  {feature.description}
-                </p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -161,11 +217,14 @@ export default function Home() {
                 View all <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
               </Link>
             </div>
-            <div className="grid gap-6 sm:grid-cols-2">
-              {posts.map((post) => (
-                <BlogCard key={post.slug} post={post} />
-              ))}
-            </div>
+            <FeaturedPost post={posts[0]} />
+            {posts.length > 1 && (
+              <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                {posts.slice(1).map((post) => (
+                  <BlogCard key={post.slug} post={post} />
+                ))}
+              </div>
+            )}
             <div className="mt-6 text-center sm:hidden">
               <Link
                 href="/blog"
@@ -199,35 +258,54 @@ export default function Home() {
                 View all <ArrowRight className="ml-1 inline h-3.5 w-3.5" />
               </Link>
             </div>
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {tools.map((tool) => (
-                <Link key={tool.slug} href={`/tools/${tool.slug}`}>
-                  <Card className="group h-full transition-colors hover:border-primary/50">
-                    <CardContent className="p-5">
-                      <div className="flex items-start justify-between">
-                        <div>
-                          <h3 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                            {tool.name}
-                          </h3>
-                          <Badge variant="outline" className="mt-1 text-xs">
-                            {tool.category}
-                          </Badge>
+            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+              {tools.map((tool, i) => (
+                <Reveal key={tool.slug} delay={(i % 3) * 80}>
+                  <Link
+                    href={`/tools/${tool.slug}`}
+                    className="group block h-full"
+                  >
+                    <article className="flex h-full flex-col rounded-xl border border-border bg-card p-5 transition-all duration-200 hover:-translate-y-1 hover:border-primary/50 hover:shadow-lg hover:shadow-primary/5">
+                      <div className="flex items-start justify-between gap-3">
+                        <div className="flex items-center gap-3">
+                          {tool.logo ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={tool.logo}
+                              alt={tool.name}
+                              className="h-10 w-10 rounded-lg object-cover"
+                              loading="lazy"
+                            />
+                          ) : (
+                            <span className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-sm font-bold text-primary ring-1 ring-primary/20">
+                              {tool.name.charAt(0)}
+                            </span>
+                          )}
+                          <div>
+                            <h3 className="font-semibold leading-tight text-foreground transition-colors group-hover:text-primary">
+                              {tool.name}
+                            </h3>
+                            <Badge variant="outline" className="mt-1 text-xs">
+                              {tool.category}
+                            </Badge>
+                          </div>
                         </div>
                         {tool.rating > 0 && (
-                          <span className="text-sm font-medium text-yellow-500">
-                            ★ {tool.rating}
+                          <span className="flex shrink-0 items-center gap-0.5 text-sm font-medium text-foreground">
+                            <Star className="h-3.5 w-3.5 fill-yellow-500 text-yellow-500" />
+                            {tool.rating}
                           </span>
                         )}
                       </div>
-                      <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
+                      <p className="mt-3 line-clamp-2 flex-1 text-sm text-muted-foreground">
                         {tool.excerpt || tool.description}
                       </p>
-                      <div className="mt-3 text-xs text-muted-foreground">
+                      <div className="mt-4 border-t border-border/60 pt-3 text-xs font-medium text-foreground">
                         {tool.pricing}
                       </div>
-                    </CardContent>
-                  </Card>
-                </Link>
+                    </article>
+                  </Link>
+                </Reveal>
               ))}
             </div>
           </div>
@@ -255,27 +333,14 @@ export default function Home() {
               Everything you need to know about Panda Coding School
             </p>
           </div>
-          <div className="space-y-4">
-            {faqs.map((faq, index) => (
-              <Card key={index} className="border-border/60">
-                <CardContent className="p-6">
-                  <h3 className="text-base font-semibold text-foreground">
-                    {faq.question}
-                  </h3>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
-                    {faq.answer}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <FaqAccordion faqs={faqs} />
         </div>
       </section>
 
       {/* Newsletter CTA */}
       <section className="py-20">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="rounded-2xl border border-border/60 bg-card p-8 text-center sm:p-12">
+          <Reveal className="rounded-2xl border border-border/60 bg-linear-to-b from-card to-primary/5 p-8 text-center sm:p-12">
             <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-3xl">
               Stay ahead in AI engineering
             </h2>
@@ -286,7 +351,21 @@ export default function Home() {
             <div className="mx-auto mt-8 max-w-md">
               <NewsletterForm variant="large" />
             </div>
-          </div>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs text-muted-foreground">
+              <span className="flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-primary" />
+                No spam, ever
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-primary" />
+                Unsubscribe anytime
+              </span>
+              <span className="flex items-center gap-1.5">
+                <Check className="h-3.5 w-3.5 text-primary" />
+                One email a week
+              </span>
+            </div>
+          </Reveal>
         </div>
       </section>
     </div>

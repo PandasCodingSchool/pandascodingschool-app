@@ -1,7 +1,5 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import { ToolsExplorer } from "@/components/tools-explorer";
 import { getAllTools, getAllToolCategories } from "@/lib/content";
 import { siteConfig } from "@/lib/config";
 import { getBreadcrumbJsonLd, getWebPageJsonLd } from "@/lib/json-ld";
@@ -81,31 +79,38 @@ export default function ToolsPage() {
           __html: JSON.stringify(getBreadcrumbJsonLd(breadcrumbItems)),
         }}
       />
-      <div className="mb-12">
+      <div className="mb-10">
         <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
-          AI Tools Directory
+          AI Tools{" "}
+          <span className="bg-linear-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            Directory
+          </span>
         </h1>
-        <p className="mt-3 text-lg text-muted-foreground">
-          Curated reviews of the best AI tools with pricing, pros/cons, and real
-          use cases.
+        <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+          Honest reviews of the best AI tools for developers, with pricing, pros
+          and cons, and the real use cases they actually shine at.
         </p>
-      </div>
 
-      {categories.length > 0 && (
-        <div className="mb-8 flex flex-wrap gap-2">
-          <Link href="/tools">
-            <Badge variant="default">All</Badge>
-          </Link>
-          {categories.map((category) => (
-            <Link
-              key={category}
-              href={`/tools/category/${category.toLowerCase().replace(/\s+/g, "-")}`}
-            >
-              <Badge variant="outline">{category}</Badge>
-            </Link>
-          ))}
-        </div>
-      )}
+        {/* Stat bar */}
+        <dl className="mt-8 grid max-w-lg grid-cols-2 gap-4 sm:grid-cols-3">
+          <div className="rounded-xl border border-border/60 bg-card px-4 py-3 text-center">
+            <dt className="text-2xl font-bold text-foreground">
+              {tools.length}+
+            </dt>
+            <dd className="text-xs text-muted-foreground">Tools reviewed</dd>
+          </div>
+          <div className="rounded-xl border border-border/60 bg-card px-4 py-3 text-center">
+            <dt className="text-2xl font-bold text-foreground">
+              {categories.length}+
+            </dt>
+            <dd className="text-xs text-muted-foreground">Categories</dd>
+          </div>
+          <div className="col-span-2 rounded-xl border border-border/60 bg-card px-4 py-3 text-center sm:col-span-1">
+            <dt className="text-2xl font-bold text-foreground">Unbiased</dt>
+            <dd className="text-xs text-muted-foreground">No paid rankings</dd>
+          </div>
+        </dl>
+      </div>
 
       {tools.length === 0 ? (
         <div className="rounded-lg border border-dashed border-border p-12 text-center">
@@ -114,49 +119,7 @@ export default function ToolsPage() {
           </p>
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {tools.map((tool) => (
-            <Link key={tool.slug} href={`/tools/${tool.slug}`}>
-              <Card className="group h-full transition-colors hover:border-primary/50">
-                <CardContent className="p-5">
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <h2 className="font-semibold text-foreground group-hover:text-primary transition-colors">
-                        {tool.name}
-                      </h2>
-                      <Badge variant="outline" className="mt-1 text-xs">
-                        {tool.category}
-                      </Badge>
-                    </div>
-                    {tool.rating > 0 && (
-                      <span className="text-sm font-medium text-yellow-500">
-                        ★ {tool.rating}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-3 line-clamp-2 text-sm text-muted-foreground">
-                    {tool.excerpt || tool.description}
-                  </p>
-                  <div className="mt-3 flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">
-                      {tool.pricing}
-                    </span>
-                    <div className="flex gap-1">
-                      {tool.tags.slice(0, 2).map((tag) => (
-                        <span
-                          key={tag}
-                          className="text-xs text-muted-foreground"
-                        >
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            </Link>
-          ))}
-        </div>
+        <ToolsExplorer tools={tools} categories={categories} />
       )}
     </div>
   );

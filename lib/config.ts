@@ -33,6 +33,16 @@ export const siteConfig = {
   },
 };
 
+// Author profile shown on blog posts and the About page.
+// TODO: update name, role, bio and avatar with your real details.
+export const authorProfile = {
+  name: "Panda Coding School",
+  role: "AI Engineer & Builder",
+  bio: "I build production AI systems and write about what actually works, what broke, and the lessons in between. Follow along for practical AI engineering, no hype.",
+  avatar: "/assets/Panda-developer.png",
+  twitter: "https://twitter.com/pandacodingschool",
+};
+
 export const mainNav: NavItem[] = [
   { title: "Home", href: "/" },
   { title: "Blog", href: "/blog" },

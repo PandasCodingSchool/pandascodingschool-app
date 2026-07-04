@@ -2,9 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
-import { Menu } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Sheet,
   SheetContent,
@@ -18,7 +19,16 @@ import { useState } from "react";
 
 export function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState("");
+
+  function handleSearch(e: React.FormEvent) {
+    e.preventDefault();
+    const trimmed = search.trim();
+    router.push(trimmed ? `/blog?q=${encodeURIComponent(trimmed)}` : "/blog");
+    setOpen(false);
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-lg">
@@ -54,6 +64,19 @@ export function SiteHeader() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <form onSubmit={handleSearch} className="hidden lg:block">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                type="search"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search blog..."
+                aria-label="Search blog"
+                className="h-9 w-48 pl-8"
+              />
+            </div>
+          </form>
           <Link href="/newsletter" className="hidden sm:block">
             <Button variant="default" size="sm">
               Newsletter
@@ -75,7 +98,20 @@ export function SiteHeader() {
               <SheetTitle className="text-lg font-bold">
                 {siteConfig.name}
               </SheetTitle>
-              <nav className="mt-6 flex flex-col gap-1">
+              <form onSubmit={handleSearch} className="mt-6">
+                <div className="relative">
+                  <Search className="pointer-events-none absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    type="search"
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    placeholder="Search blog..."
+                    aria-label="Search blog"
+                    className="h-9 w-full pl-8"
+                  />
+                </div>
+              </form>
+              <nav className="mt-4 flex flex-col gap-1">
                 {mainNav.map((item) => (
                   <Link
                     key={item.href}

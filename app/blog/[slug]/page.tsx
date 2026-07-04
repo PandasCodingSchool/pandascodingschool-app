@@ -6,6 +6,8 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { NewsletterForm } from "@/components/newsletter-form";
+import { ReadingProgress } from "@/components/reading-progress";
+import { AuthorBio } from "@/components/author-bio";
 import { getBlogPost, getAllBlogPosts, getRelatedPosts } from "@/lib/content";
 import { renderMDX } from "@/lib/mdx";
 import { siteConfig } from "@/lib/config";
@@ -101,6 +103,7 @@ export default async function BlogPostPage({
 
   return (
     <article className="mx-auto max-w-4xl px-4 py-16 sm:px-6">
+      <ReadingProgress />
       {/* Article Structured Data */}
       <script
         type="application/ld+json"
@@ -166,6 +169,11 @@ export default async function BlogPostPage({
       <Separator className="mb-10" />
 
       <div className="prose-custom">{content}</div>
+
+      <Separator className="my-12" />
+
+      {/* Author bio */}
+      <AuthorBio />
 
       <Separator className="my-12" />
 
